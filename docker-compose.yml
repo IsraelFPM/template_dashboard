@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  meu_dashboard:
+    build: .
+    container_name: dashboard_analise
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1

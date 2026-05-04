@@ -15,14 +15,15 @@ def plot_barras(df, x, y, hue=None, tipo='vertical', agrupamento='agrupado',
     
     # Barras Empilhadas (Pandas Plot é mais fácil para empilhado estático)
     if agrupamento == 'empilhado':
-        # Precisamos pivotar os dados para empilhar corretamente
-        df_pivot = df.pivot_table(index=x if tipo == 'vertical' else y, 
-                                  columns=hue, values=y if tipo == 'vertical' else x, aggfunc='sum')
+        # CORREÇÃO: x é sempre a categoria (index) e y é sempre o valor numérico.
+        # O Pandas já sabe inverter os eixos visualmente quando usamos 'barh'.
+        df_pivot = df.pivot_table(index=x, columns=hue, values=y, aggfunc='sum')
         df_pivot.plot(kind='barh' if tipo == 'horizontal' else 'bar', 
                       stacked=True, ax=ax, colormap=paleta_cores)
     
     # Barras Agrupadas (Seaborn é ideal)
     else:
+        # Aqui a inversão de x e y é mantida, pois o Seaborn precisa dessa instrução direta
         if tipo == 'horizontal':
             sns.barplot(data=df, x=y, y=x, hue=hue, ax=ax, palette=paleta_cores)
         else:
